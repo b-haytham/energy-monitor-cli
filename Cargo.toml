@@ -11,7 +11,9 @@ bson = { version = "2.3.0", features = ["chrono-0_4"] }
 chrono = "0.4.19"
 clap = { version = "3.2.13", features = ["derive", "env"] }
 dotenv = { version = "0.15.0", features = ["clap"] }
+env_logger = "0.9.0"
 futures = "0.3.21"
+log = "0.4.17"
 mongodb = "2.3.0"
 rand = "0.8.5"
 serde = { version = "1.0.140", features = ["derive"] }
