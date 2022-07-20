@@ -1,5 +1,5 @@
 use clap::Parser;
-use log::{trace, debug, info};
+use log::{trace, debug, info, error};
 use dotenv;
 
 use env_logger::Env;
@@ -41,12 +41,32 @@ async fn main() -> anyhow::Result<()> {
                     uri,
                     database,
                     collection,
-                    repl_set
+                    repl_set,
+                    seed_config,
                 } => {
                     debug!("db seed command : database {} | collection {}", &database, &collection);
                     let db = Database::new(&uri, &database, &collection, &repl_set).await?;
+                    info!("Connected to database");
                     let names = db.list_collections().await?;
                     info!("collection names >> {:?}", names);
+                    let seed_config = db.parse_seed_config_from_path(seed_config).await;
+                    match seed_config {
+                        Ok(val) => {
+                            debug!("Seed Config >> {:?}", &val);
+                            let device_info = val.devices.get(0);
+                            match device_info.to_owned() {
+                                Some(info) => {
+                                    db.seed_device(info).await?
+                                },
+                                None => {
+                                    info!("Nothing here")
+                                }
+                            }
+                        },
+                        Err(e) => {
+                            error!("Can`t parse seed config file: {}", &e);
+                        }
+                    }
                 },
                 DbCommands::Drop {
                     uri,
@@ -59,6 +79,8 @@ async fn main() -> anyhow::Result<()> {
                     info!("Connected to database");
                     let names = db.list_collections().await?;
                     info!("collection names >> {:?}", names);
+                    let deleted_count = db.drop().await?;
+                    info!("Deleted {deleted_count} documents");
                 }
             }
         }

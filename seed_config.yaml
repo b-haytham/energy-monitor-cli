@@ -1,0 +1,21 @@
+devices: 
+    # (mongo objectid) device subscription_id
+  - subscription_id: "62c86f3ef5f01b39caa4cae9"
+
+    # (mongo objectid) device id 
+    device_id: "62c86fc4f5f01b39caa4caf2"
+
+    # (optional) name
+    device_name: "dev1"
+
+    # device value to seed
+    value_name: "p"
+
+    # "Add" :whether the to be added to the previous value | "Random": randomly generated values
+    value_create_option: "Random"
+
+    # how many month the device has been sending data
+    months: 12
+
+    # interval in seconds between 2 device messages
+    interval: 15

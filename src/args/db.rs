@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use clap::Subcommand;
 
 
@@ -20,6 +22,9 @@ pub enum DbCommands {
 
         #[clap(short, env = "MONGO_REPL_SET")]
         repl_set: String,
+
+        #[clap(short='p', parse(from_os_str))]
+        seed_config: Option<PathBuf>
     },
 
     #[clap(
