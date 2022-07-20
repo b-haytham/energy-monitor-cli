@@ -1,0 +1,19 @@
+[package]
+name = "power-monitor-cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.58"
+bson = { version = "2.3.0", features = ["chrono-0_4"] }
+chrono = "0.4.19"
+clap = { version = "3.2.13", features = ["derive", "env"] }
+dotenv = { version = "0.15.0", features = ["clap"] }
+futures = "0.3.21"
+mongodb = "2.3.0"
+rand = "0.8.5"
+serde = { version = "1.0.140", features = ["derive"] }
+serde_yaml = "0.8.26"
+tokio = { version = "1.20.0", features = ["full"] }
