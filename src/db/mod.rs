@@ -1,7 +1,8 @@
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use log::{info, debug};
+use futures::future::join_all;
+use log::{info, debug, trace};
 
 use mongodb::Client;
 use mongodb::options::ClientOptions;
@@ -47,6 +48,22 @@ impl Database {
         Ok(names)
     }
 
+    pub async fn seed(&self, seed_config_path: Option<PathBuf>) -> anyhow::Result<()> {
+        let seed_config = self.parse_seed_config_from_path(seed_config_path).await?;
+        let device_infos = seed_config.devices;
+        
+        trace!("start seeding for {} devices", &device_infos.len());
+
+        let mut futures = Vec::new();
+
+        for device_info in device_infos {
+            futures.push(self.seed_device(device_info))
+        }
+
+        join_all(futures).await;
+
+        Ok(())
+    }
     // drop values for all devices
     pub async fn drop(&self) -> anyhow::Result<u64> {
         let client = &self.client;
@@ -62,12 +79,12 @@ impl Database {
         Ok(result.deleted_count)
     }
 
-    pub async fn parse_seed_config_from_path(&self, path: Option<PathBuf>) -> anyhow::Result<seed_config::SeedConfig> {
+    async fn parse_seed_config_from_path(&self, path: Option<PathBuf>) -> anyhow::Result<seed_config::SeedConfig> {
         let config = seed_config::SeedConfig::parse_from_path(path).await?;
         Ok(config)
     }
 
-    pub async fn seed_device(&self, device_info: &seed_config::DeviceInfo) -> anyhow::Result<()> {
+    async fn seed_device(&self, device_info: seed_config::DeviceInfo) -> anyhow::Result<()> {
         let client = &self.client;
         let database = &self.database;
         let collection = &self.collection;
