@@ -97,11 +97,11 @@ impl Database {
 
             let mut arr: Vec<models::Value> = Vec::with_capacity(NUM_VALUES_PER_INSERT);
 
-            if past >= now {
-                break;
-            }
+            for _ in 0..NUM_VALUES_PER_INSERT {
+                if past >= now {
+                    break;
+                }
 
-            for _ in 0..NUM_VALUES_PER_INSERT - 1 {
                 let value = models::Value::new(value_source.clone(), val.clone(), past.clone());
                 arr.push(value);
 
