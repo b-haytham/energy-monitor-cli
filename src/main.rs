@@ -1,20 +1,22 @@
 use clap::Parser;
-use log::{trace, debug, info};
+use log::{trace, info};
 use dotenv;
 
 use env_logger::Env;
 
 mod args;
 mod db;
+mod mqtt;
 
 use args::*;
 use db::*;
+use mqtt::*;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::from_path(".env").ok();
     let env = Env::default()
-        .filter_or("LOG_LEVEL", "trace")
+        .filter_or("LOG_LEVEL", "info")
         .write_style_or("LOG_STYLE", "always");
 
     env_logger::init_from_env(env);
@@ -27,11 +29,27 @@ async fn main() -> anyhow::Result<()> {
     match command {
         ArgCommands::Mqtt(mqtt_command) => {
             match mqtt_command {
-                MqttCommands::Pub { host, topic } => {
-                    debug!("mqtt publish command : host {host} | topic : {topic}");
+                MqttCommands::Pub { 
+                    host, 
+                    port, 
+                    topic, 
+                    username, 
+                    password, 
+                    publish_config 
+                } => {
+                    info!("mqtt publish command : host {host} | topic : {topic}");
+                    let username = username.as_deref();
+                    let password = password.as_deref();
+                    let mut mqtt_client = Mqtt::new(
+                        &host, 
+                        port, 
+                        username, 
+                        password                    
+                    ).await?;
+                    mqtt_client.publish(publish_config).await?;
                 },
-                MqttCommands::Sub { host, topic } => {
-                    debug!("mqtt subscribe command : host {host} | topic : {topic}");
+                MqttCommands::Sub { host, port: _, topic, username: _, password: _ } => {
+                    info!("mqtt subscribe command : host {host} | topic : {topic}");
                 }
             }
         },
@@ -44,7 +62,7 @@ async fn main() -> anyhow::Result<()> {
                     repl_set,
                     seed_config,
                 } => {
-                    debug!("db seed command : database {} | collection {}", &database, &collection);
+                    info!("db seed command : database {} | collection {}", &database, &collection);
                     let db = Database::new(&uri, &database, &collection, &repl_set).await?;
                     info!("Connected to database");
                     let names = db.list_collections().await?;
@@ -58,7 +76,7 @@ async fn main() -> anyhow::Result<()> {
                     collection,
                     repl_set
                 } => {
-                    debug!("db drop command : database {database} | collection {collection}");
+                    info!("db drop command : database {database} | collection {collection}");
                     let db = Database::new(&uri, &database, &collection, &repl_set).await?;
                     info!("Connected to database");
                     let names = db.list_collections().await?;
