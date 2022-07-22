@@ -1,6 +1,6 @@
 use std::{time::Duration, path::PathBuf, collections::HashMap, str::FromStr};
 
-use futures::future::try_join_all;
+use futures::{future::try_join_all, StreamExt};
 use log::{trace, info};
 use rand::Rng;
 
@@ -30,6 +30,19 @@ impl Mqtt {
         let connect_opts = connect_opt_builder.finalize();
         client.connect(connect_opts).await?;
         Ok(Self { client })
+    }
+
+    pub async fn subscribe(&mut self, topics: Vec<String>) -> anyhow::Result<()> {
+        let mut stream = self.client.get_stream(55);
+
+        self.client.subscribe_many(&topics, &[1, topics.len() as i32]);
+    
+        while let Some(msg_opt) = stream.next().await {
+            if let Some(msg) = msg_opt {
+                info!("Recived {msg}");
+            }
+        }
+        Ok(())
     }
 
     pub async fn publish(&mut self, publish_config_path: Option<PathBuf>) -> anyhow::Result<()> {

@@ -48,8 +48,19 @@ async fn main() -> anyhow::Result<()> {
                     ).await?;
                     mqtt_client.publish(publish_config).await?;
                 },
-                MqttCommands::Sub { host, port: _, topic, username: _, password: _ } => {
-                    info!("mqtt subscribe command : host {host} | topic : {topic}");
+                MqttCommands::Sub { host, port, topic, username, password } => {
+                    let topics = topic.split(" ").map(|s| s.to_string()).collect::<Vec<String>>();
+                    info!("mqtt subscribe command : host {host} | topics : {:?}", &topics);
+                    let username = username.as_deref();
+                    let password = password.as_deref();
+                    let mut mqtt_client = Mqtt::new(
+                        &host, 
+                        port, 
+                        username, 
+                        password                    
+                    ).await?;
+
+                    mqtt_client.subscribe(topics).await?
                 }
             }
         },
