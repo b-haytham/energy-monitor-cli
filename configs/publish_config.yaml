@@ -1,0 +1,166 @@
+
+devices: 
+  - id: "62c86fe9f5f01b39caa4cb32"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmM4NmZlOWY1ZjAxYjM5Y2FhNGNiMzIiLCJzdWJzY3JpcHRpb24iOiI2MmM4NmYzZWY1ZjAxYjM5Y2FhNGNhZTkiLCJpYXQiOjE2NTg1ODg3ODN9.GyLRsTy9j7Agcio4U_zKvDoVqptJ9qstN9SPJdszv70"
+    topic: "device/notification"
+    interval: 2 #seconds
+    repeat: true
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
+  - id: "62c86fe1f5f01b39caa4cb22"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmM4NmZlMWY1ZjAxYjM5Y2FhNGNiMjIiLCJzdWJzY3JpcHRpb24iOiI2MmM4NmYzZWY1ZjAxYjM5Y2FhNGNhZTkiLCJpYXQiOjE2NTg1ODk3ODZ9.WjWsViYPhlnXbuIrBbL960dI8azEmhKnOX746epEQUQ"
+    repeat: true
+    topic: "device/notification"
+    interval: 5 #seconds
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
+  - id: "62c86fd9f5f01b39caa4cb12"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmM4NmZkOWY1ZjAxYjM5Y2FhNGNiMTIiLCJzdWJzY3JpcHRpb24iOiI2MmM4NmYzZWY1ZjAxYjM5Y2FhNGNhZTkiLCJpYXQiOjE2NTg1ODk4MzJ9.5GzbMG1XaL8mHWBugBY-kjaqLTt0V3eJe466O-IhBj0"
+    repeat: true
+    topic: "device/notification"
+    interval: 8 #seconds
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
+  - id: "62c86fd3f5f01b39caa4cb02"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmM4NmZkM2Y1ZjAxYjM5Y2FhNGNiMDIiLCJzdWJzY3JpcHRpb24iOiI2MmM4NmYzZWY1ZjAxYjM5Y2FhNGNhZTkiLCJpYXQiOjE2NTg1ODk4Nzh9.AVMmU4ypHPJ6HmN19fzwxELMgL5xOKRzIwQJKSduNjQ"
+    repeat: true
+    topic: "device/notification"
+    interval: 8 #seconds
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
+  - id: "62c86fc4f5f01b39caa4caf2"
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmM4NmZjNGY1ZjAxYjM5Y2FhNGNhZjIiLCJzdWJzY3JpcHRpb24iOiI2MmM4NmYzZWY1ZjAxYjM5Y2FhNGNhZTkiLCJpYXQiOjE2NTg1ODk5MTB9.1WKRx2RDvT7rjiH1n139ZBKVvpMqtDDPrtCwi2oUCXg"
+    repeat: true
+    topic: "device/notification"
+    interval: 8 #seconds
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69

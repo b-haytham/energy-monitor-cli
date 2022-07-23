@@ -33,32 +33,22 @@ async fn main() -> anyhow::Result<()> {
                     host, 
                     port, 
                     topic, 
-                    username, 
-                    password, 
                     publish_config 
                 } => {
                     info!("mqtt publish command : host {host} | topic : {topic}");
-                    let username = username.as_deref();
-                    let password = password.as_deref();
                     let mut mqtt_client = Mqtt::new(
                         &host, 
                         port, 
-                        username, 
-                        password                    
-                    ).await?;
+                    );
                     mqtt_client.publish(publish_config).await?;
                 },
-                MqttCommands::Sub { host, port, topic, username, password } => {
+                MqttCommands::Sub { host, port, topic } => {
                     let topics = topic.split(" ").map(|s| s.to_string()).collect::<Vec<String>>();
                     info!("mqtt subscribe command : host {host} | topics : {:?}", &topics);
-                    let username = username.as_deref();
-                    let password = password.as_deref();
                     let mut mqtt_client = Mqtt::new(
                         &host, 
                         port, 
-                        username, 
-                        password                    
-                    ).await?;
+                    );
 
                     mqtt_client.subscribe(topics).await?
                 }

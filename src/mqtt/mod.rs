@@ -8,34 +8,54 @@ mod models;
 mod publish_config;
 
 pub struct Mqtt {
-    client: paho_mqtt::AsyncClient,
+    host: String,
+    port: u16,
 }
 
 impl Mqtt {
-     pub async fn new(host: &str, port: u16, username: Option<&str>, password: Option<&str>) -> anyhow::Result<Self> {
-         
-        let client = paho_mqtt::AsyncClient::new(format!("tcp://{}:{}", host, port))?;
+     pub fn new(host: &str, port: u16) -> Self {
+        Self {
+            host: host.into(),
+            port
+        }
+    }
+    
+    async fn create_client(&self, client_id: &str, password: Option<&str>) -> anyhow::Result<paho_mqtt::AsyncClient> {
+
+        let create_opt_builder = paho_mqtt::create_options::CreateOptionsBuilder::new();
+
+        let create_opt_builder = create_opt_builder.server_uri(format!("tcp://{}:{}", &self.host, &self.port));
+
+        let create_opt_builder = create_opt_builder.client_id(client_id);
+
+        let create_opt = create_opt_builder.finalize();
+
+        let client = paho_mqtt::AsyncClient::new(create_opt)?;
 
         let mut connect_opt_builder = paho_mqtt::connect_options::ConnectOptionsBuilder::new();
 
         connect_opt_builder.keep_alive_interval(Duration::from_secs(20));
         
-        match (username, password) {
-            (Some(username), Some(password)) => {
-                connect_opt_builder.user_name(username).password(password);
-            },
+        // pass
+
+        match password {
+            Some(password) => {
+                connect_opt_builder.user_name(client_id).password(password);
+            }
             _ => {} 
         }
         
         let connect_opts = connect_opt_builder.finalize();
         client.connect(connect_opts).await?;
-        Ok(Self { client })
+        
+        Ok(client)
     }
 
     pub async fn subscribe(&mut self, topics: Vec<String>) -> anyhow::Result<()> {
-        let mut stream = self.client.get_stream(55);
+        let mut client = self.create_client("srv_power-monito-cli", None).await?;
+        let mut stream = client.get_stream(55);
 
-        self.client.subscribe_many(&topics, &[1, topics.len() as i32]);
+        client.subscribe_many(&topics, &[1, topics.len() as i32]);
     
         while let Some(msg_opt) = stream.next().await {
             if let Some(msg) = msg_opt {
@@ -63,7 +83,7 @@ impl Mqtt {
     }
 
     async fn publish_device(&self, device_info: publish_config::DeviceInfo) -> anyhow::Result<()> {
-
+        let client = self.create_client(&device_info.id, Some(&device_info.token)).await?;
 
         let message_payload = self.get_message_payload(&device_info.values)?;
 
@@ -75,7 +95,7 @@ impl Mqtt {
 
     
         if !device_info.repeat {
-            self.client.publish(
+            client.publish(
                 paho_mqtt::Message::new(&device_info.topic, mqtt_message.try_to_string()?, paho_mqtt::QOS_1)
             ).await?;
             info!("sent to topic {} payload {}", &device_info.topic, &mqtt_message.try_to_string()?);
@@ -90,7 +110,7 @@ impl Mqtt {
                 &chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs , true)
             );
             
-            let res =  self.client.publish(
+            let res = client.publish(
                 paho_mqtt::Message::new(&device_info.topic, mqtt_message.try_to_string()?, paho_mqtt::QOS_1)
             ).await;
             

@@ -17,12 +17,6 @@ pub enum MqttCommands {
         #[clap(short = 't', env = "MQTT_TOPIC")]
         topic: String,
 
-        #[clap(short = 'u', env = "MQTT_USERNAME")]
-        username: Option<String>,
-
-        #[clap(short = 'p', env = "MQTT_PASSWORD")]
-        password: Option<String>,
-
         #[clap(short='m', parse(from_os_str))]
         publish_config: Option<PathBuf>
     },
@@ -37,12 +31,6 @@ pub enum MqttCommands {
 
         #[clap(short='t', env = "MQTT_TOPIC")]
         topic: String,
-
-        #[clap(short = 'u', env = "MQTT_USERNAME")]
-        username: Option<String>,
-
-        #[clap(short = 'p', env = "MQTT_PASSWORD")]
-        password: Option<String>
     }, 
 }
 

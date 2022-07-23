@@ -35,7 +35,7 @@ impl SeedConfig {
     pub async fn parse_from_path(path: Option<PathBuf>) -> anyhow::Result<Self> {
         let seed_config_path = match path {
             Some(path) => path,
-            None => PathBuf::from("./seed_config.yaml")
+            None => PathBuf::from("./configs/seed_config.yaml")
         };
 
         let file_content = fs::read_to_string(seed_config_path).await?;

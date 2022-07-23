@@ -14,6 +14,7 @@ pub struct DeviceValueInfo {
 #[derive(Deserialize, Debug)]
 pub struct DeviceInfo {
     pub id: String,
+    pub token: String,
     pub repeat: bool,
     pub topic: String,
     pub interval: u64,
@@ -29,7 +30,7 @@ impl PublishConfig {
     pub async fn parse_from_path(path: Option<PathBuf>) -> anyhow::Result<Self> {
         let seed_config_path = match path {
             Some(path) => path,
-            None => PathBuf::from("./publish_config.yaml")
+            None => PathBuf::from("./configs/publish_config.yaml")
         };
 
         let file_content = fs::read_to_string(seed_config_path).await?;
