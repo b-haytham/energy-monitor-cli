@@ -38,11 +38,8 @@ impl Mqtt {
         
         // pass
 
-        match password {
-            Some(password) => {
-                connect_opt_builder.user_name(client_id).password(password);
-            }
-            _ => {} 
+        if let Some(password) = password {
+            connect_opt_builder.user_name(client_id).password(password);
         }
         
         let connect_opts = connect_opt_builder.finalize();
@@ -52,7 +49,7 @@ impl Mqtt {
     }
 
     pub async fn subscribe(&mut self, topics: Vec<String>) -> anyhow::Result<()> {
-        let mut client = self.create_client("srv_power-monito-cli", None).await?;
+        let mut client = self.create_client("srv_energy-monito-cli", None).await?;
         let mut stream = client.get_stream(55);
 
         client.subscribe_many(&topics, &[1, topics.len() as i32]);
@@ -139,6 +136,14 @@ impl Mqtt {
                 },
                 (Some(min), Some(max), None) => {
                     trace!("value with min ({}) and max ({})", min, max);
+                    if min > max {
+                        return Err(anyhow::anyhow!(
+                                "Provider min value {:?} greater than max value {} for dev {}", 
+                                min, 
+                                max, 
+                                value_info.name,
+                                ));
+                    }
                     message_payload.insert(String::from_str(value_info.name.as_str())?, range.gen_range(min..max));
                 },
                 _ => {
