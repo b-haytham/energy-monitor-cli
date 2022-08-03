@@ -1,2 +1,9 @@
 /target
 .env
+
+configs/*
+
+!configs/examples
+
+*localhost*
+

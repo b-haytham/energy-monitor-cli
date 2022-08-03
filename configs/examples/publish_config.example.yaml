@@ -1,0 +1,68 @@
+
+devices: 
+  - id: <DEVICE_ID>
+    token: <DEVICE_JWT_TOKEN>
+    topic: "device/notification"
+    interval: 2 #seconds
+    repeat: true
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
+  - id: <DEVICE_ID>
+    token: <DEVICE_JWT_TOKEN>
+    repeat: true
+    topic: "device/notification"
+    interval: 5 #seconds
+    values:
+      - name: "s"
+        value: 1
+      - name: "u1"
+        min: 0
+        max: 250
+      - name: "u2"
+        min: 0
+        max: 250
+      - name: "u3"
+        min: 0
+        max: 250
+      - name: "i1"
+        min: 0
+        max: 20
+      - name: "i2"
+        min: 0
+        max: 20
+      - name: "i3"
+        min: 0
+        max: 20
+      - name: "p"
+        min: 0
+        max: 120
+      - name: "e"
+        min: 0
+        max: 69
+
