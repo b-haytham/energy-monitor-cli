@@ -38,15 +38,15 @@ impl Database {
     }
 
 
-    // test client ?
-    pub async fn list_collections(&self) -> anyhow::Result<Vec<String>> {
-        let client = &self.client;
-        let database = &self.database;
-        let _collection = &self.collection;
-
-        let names = client.database(database).list_collection_names(None).await?;
-        Ok(names)
-    }
+    // // test client ?
+    // pub async fn list_collections(&self) -> anyhow::Result<Vec<String>> {
+    //     let client = &self.client;
+    //     let database = &self.database;
+    //     let _collection = &self.collection;
+    //
+    //     let names = client.database(database).list_collection_names(None).await?;
+    //     Ok(names)
+    // }
 
     pub async fn seed(&self, seed_config_path: Option<PathBuf>) -> anyhow::Result<()> {
         let seed_config = self.parse_seed_config_from_path(seed_config_path).await?;
@@ -99,7 +99,7 @@ impl Database {
             &device_info.value_name,
         )?;
 
-        let mut past = chrono::Utc::now() - chrono::Duration::days(30 * *&device_info.months as i64);
+        let mut past = chrono::Utc::now() - chrono::Duration::days(30 * device_info.months as i64);
         debug!("Past data {:?}", &past);
         let now = chrono::Utc::now();
 
@@ -119,7 +119,7 @@ impl Database {
                     break;
                 }
 
-                let value = models::Value::new(value_source.clone(), val.clone(), past.clone());
+                let value = models::Value::new(value_source.clone(), val, past);
                 arr.push(value);
 
 
@@ -130,7 +130,10 @@ impl Database {
                         val + range.gen_range(0.0..120.0)
                     },
                     seed_config::ValueSeedOptions::Random => {
-                        range.gen_range(0.0..120.0)
+                        match (device_info.min, device_info.max) {
+                            (Some(min), Some(max)) => range.gen_range(min..max),
+                            _ => range.gen_range(0.0..2.0)
+                        }
                     }
                 };
                 past = past + chrono::Duration::seconds(*mesg_interval as i64);

@@ -21,6 +21,10 @@ pub struct DeviceInfo {
 
     pub value_create_option: ValueSeedOptions,
 
+    pub min: Option<f64>,
+
+    pub max: Option<f64>,
+
     pub months: u64,
 
     pub interval: u8,

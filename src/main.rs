@@ -66,10 +66,8 @@ async fn main() -> anyhow::Result<()> {
                     info!("db seed command : database {} | collection {}", &database, &collection);
                     let db = Database::new(&uri, &database, &collection, &repl_set).await?;
                     info!("Connected to database");
-                    let names = db.list_collections().await?;
-                    info!("collection names >> {:?}", names);
                     db.seed(seed_config).await?;
-                    info!("Done seeding");
+                    info!("Done inserting");
                 },
                 DbCommands::Drop {
                     uri,
@@ -80,8 +78,6 @@ async fn main() -> anyhow::Result<()> {
                     info!("db drop command : database {database} | collection {collection}");
                     let db = Database::new(&uri, &database, &collection, &repl_set).await?;
                     info!("Connected to database");
-                    let names = db.list_collections().await?;
-                    info!("collection names >> {:?}", names);
                     let deleted_count = db.drop().await?;
                     info!("Deleted {deleted_count} documents");
                 }
