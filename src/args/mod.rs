@@ -10,7 +10,7 @@ pub use db::*;
 #[clap(
     author = "haytham boussarsar", 
     version, 
-    about = "cli application to work with Power Monitor app in development"
+    about = "cli application to work with Energy Monitor app in development"
 )]
 pub struct Args {
     #[clap(subcommand)]
